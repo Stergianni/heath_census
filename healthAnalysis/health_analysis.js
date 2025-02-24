@@ -23,7 +23,10 @@ function addPatient() {
 // Function to reset the form fields after adding a patient
 function resetForm() {
     document.getElementById("name").value = "";
+    
+    // Uncheck all gender radio buttons safely
     document.querySelectorAll('input[name="gender"]').forEach(radio => radio.checked = false);
+    
     document.getElementById("age").value = "";
     document.getElementById("condition").value = "";
 }
