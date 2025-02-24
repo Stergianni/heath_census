@@ -31,5 +31,42 @@ function resetForm() {
     document.getElementById("condition").value = "";
 }
 
+// Function to generate the report
+function generateReport() {
+    const numPatients = patients.length;
+    
+    const conditionsCount = {
+        Diabetes: 0,
+        Thyroid: 0,
+        "High Blood Pressure": 0,
+    };
+
+    const genderConditionsCount = {
+        Male: { Diabetes: 0, Thyroid: 0, "High Blood Pressure": 0 },
+        Female: { Diabetes: 0, Thyroid: 0, "High Blood Pressure": 0 },
+    };
+
+    // Loop through patient data to count conditions
+    for (const patient of patients) {
+        conditionsCount[patient.condition]++;
+        genderConditionsCount[patient.gender][patient.condition]++;
+    }
+
+    // Generate the report
+    report.innerHTML = `<h3>Number of Patients: ${numPatients}</h3><br>`;
+    report.innerHTML += `<h3>Conditions Breakdown:</h3>`;
+    for (const condition in conditionsCount) {
+        report.innerHTML += `${condition}: ${conditionsCount[condition]}<br>`;
+    }
+
+    report.innerHTML += `<br><h3>Gender-Based Conditions:</h3>`;
+    for (const gender in genderConditionsCount) {
+        report.innerHTML += `<strong>${gender}:</strong><br>`;
+        for (const condition in genderConditionsCount[gender]) {
+            report.innerHTML += `&nbsp;&nbsp;${condition}: ${genderConditionsCount[gender][condition]}<br>`;
+        }
+    }
+}
+
 // Event listener for Add Patient button
 addPatientButton.addEventListener("click", addPatient);
