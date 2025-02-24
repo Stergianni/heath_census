@@ -70,10 +70,47 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Ensure the button exists before adding an event listener
+    // Function to search for a health condition
+    function searchCondition() {
+        const input = document.getElementById('conditionInput').value.toLowerCase();
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = '';
+
+        fetch('health_analysis.json')
+            .then(response => response.json())
+            .then(data => {
+                const condition = data.conditions.find(item => item.name.toLowerCase() === input);
+
+                if (condition) {
+                    const symptoms = condition.symptoms.join(', ');
+                    const prevention = condition.prevention.join(', ');
+                    const treatment = condition.treatment;
+
+                    resultDiv.innerHTML += `<h2>${condition.name}</h2>`;
+                    resultDiv.innerHTML += `<img src="${condition.imagesrc}" alt="${condition.name} Image" width="200">`;
+                    resultDiv.innerHTML += `<p><strong>Symptoms:</strong> ${symptoms}</p>`;
+                    resultDiv.innerHTML += `<p><strong>Prevention:</strong> ${prevention}</p>`;
+                    resultDiv.innerHTML += `<p><strong>Treatment:</strong> ${treatment}</p>`;
+                } else {
+                    resultDiv.innerHTML = '<p style="color:red;">Condition not found.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultDiv.innerHTML = '<p style="color:red;">An error occurred while fetching data.</p>';
+            });
+    }
+
+    // Ensure the buttons exist before adding event listeners
     if (addPatientButton) {
         addPatientButton.addEventListener("click", addPatient);
     } else {
         console.error("Error: 'addPatient' button not found in the HTML.");
+    }
+
+    if (btnSearch) {
+        btnSearch.addEventListener('click', searchCondition);
+    } else {
+        console.error("Error: 'btnSearch' button not found in the HTML.");
     }
 });
